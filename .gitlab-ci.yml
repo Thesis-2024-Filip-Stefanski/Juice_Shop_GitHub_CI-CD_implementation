@@ -22,8 +22,8 @@ test_and_build:
     - docker exec -i NPM pwd
     - docker exec -i -w /builds NPM ls
     - docker exec -i -w /builds/filip.st1357 NPM ls
-    - docker exec -i -w /builds/filip.st1357/juice-shop_NPM NPM ls
-    - docker exec -i -w ${CI_PROJECT_DIR} NPM ls
+    - docker exec -i -w /builds/filip.st1357/juice-shop_NPM/juice-shop_NPM NPM ls
+    - docker exec -i -w ${CI_PROJECT_DIR}/juice-shop_NPM NPM ls
     - docker ps 
     - docker network inspect mynetwork
   script:
