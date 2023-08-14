@@ -20,7 +20,8 @@ test_and_build:
     - docker cp ${CI_PROJECT_DIR} NPM:/${CI_PROJECT_DIR}
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
-    - docker exec -i -w ${CI_PROJECT_DIR} NPM npm install
+    - docker exec -i -w /builds NPM ls
+    - docker exec -i -w /builds/filip.st1357 NPM ls
     - docker ps 
     - docker network inspect mynetwork
   script:
