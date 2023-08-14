@@ -23,7 +23,8 @@ test:
     ZAP_ALERT_REPORT: alert-report
     ZAP_REPORT: baselinescan
   script:
-    - /zap/zap.sh -cmd -autorun $CI_PROJECT_DIR/zap/npm-web-app.yaml.yaml
+    - ls
+    - /zap/zap.sh -cmd -autorun /zap/npm-web-app.yaml.yaml
   only:
     refs:
     - branches
