@@ -13,7 +13,7 @@ test_and_build:
       alias: app
   before_script:
     - docker network create mynetwork
-    - docker run -d -i -t --network=mynetwork --name NPM node:latest
+    - docker run -d -i -t --network=mynetwork -v $(pwd):/${CI_PROJECT_DIR}/:rw --name NPM node:latest
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
     - docker exec -i NPM mkdir -p ${CI_PROJECT_DIR}
