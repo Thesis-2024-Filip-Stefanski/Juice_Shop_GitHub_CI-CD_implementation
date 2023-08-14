@@ -16,18 +16,17 @@ test_and_build:
     - docker run -d -i -t --network=mynetwork --name NPM node:latest
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
-  #- docker exec -i NPM mkdir -p ${CI_PROJECT_DIR}
+    - docker exec -i NPM mkdir -p ${CI_PROJECT_DIR}
     - docker cp ${CI_PROJECT_DIR} NPM:/${CI_PROJECT_DIR}
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
     - docker exec -i -w /builds NPM ls
     - docker exec -i -w /builds/filip.st1357 NPM ls
-    - docker exec -i -w /builds/filip.st1357/juice-shop_NPM/juice-shop_NPM NPM ls
-    - docker exec -i -w ${CI_PROJECT_DIR}/juice-shop_NPM NPM ls
+    - docker exec -i -w ${CI_PROJECT_DIR}/juice-shop_NPM NPM npm install
     - docker ps 
     - docker network inspect mynetwork
   script:
-    - docker exec -i NPM - npm start & 
+    - docker exec -i -w ${CI_PROJECT_DIR}/juice-shop_NPM NPM npm start & 
     - docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
     - docker ps
     - docker cp npm-web-app.yaml OWASPZAP:/zap/npm-web-app.yaml 
