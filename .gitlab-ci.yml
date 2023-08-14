@@ -24,7 +24,8 @@ test:
     ZAP_REPORT: baselinescan
   script:
     - ls
-    - /zap/zap.sh -cmd -autorun /zap/npm-web-app.yaml
+    - pwd
+    - /zap/zap.sh -cmd -autorun npm-web-app.yaml
   only:
     refs:
     - branches
