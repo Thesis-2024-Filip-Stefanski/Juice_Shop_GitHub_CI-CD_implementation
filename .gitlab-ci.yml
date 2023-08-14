@@ -14,8 +14,8 @@ test_and_build:
   before_script:
     - docker network create mynetwork
     - docker run -d -i -t --network=mynetwork --name NPM node:latest
-    - docker exec -i  ls
-    - docker exec -i  pwd
+    - docker exec -i NPM ls
+    - docker exec -i NPM pwd
     - docker ps 
     - docker network connect mynetwork NPM
     - docker network inspect mynetwork
