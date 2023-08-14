@@ -16,8 +16,10 @@ test_and_build:
     - docker run -d -i -t --network=mynetwork --name NPM node:latest
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
+    - docker cp  -R / NPM:/
+    - docker exec -i NPM ls
+    - docker exec -i NPM pwd
     - docker ps 
-    - docker network connect mynetwork NPM
     - docker network inspect mynetwork
   script:
     - docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
