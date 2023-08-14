@@ -25,7 +25,7 @@ test:
   script:
     - ls
     - pwd
-    - /zap/zap.sh -cmd -autorun npm-web-app.yaml
+    - /zap/zap.sh -cmd -autorun /builds/filip.st1357/juice-shop_NPM/npm-web-app.yaml
   only:
     refs:
     - branches
