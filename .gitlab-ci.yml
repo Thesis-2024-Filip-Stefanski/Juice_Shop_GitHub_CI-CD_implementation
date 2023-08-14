@@ -1,7 +1,41 @@
-include:
-  - template: Auto-DevOps.gitlab-ci.yml
+stages:
+  - build 
+  - test 
+  - end 
 
-variables:
-  SAST_EXCLUDED_PATHS: "frontend/src/assets/private/**"
-  TEST_DISABLED: "true"
-  DAST_DISABLED: "true"
+
+build:
+  tags: 
+    - gitlab-org-docker
+  stage: build
+  image: node:latest
+  services:
+    - name: docker:dind
+      alias: app
+  before_script:
+    - docker network create mynetwork
+    - docker-compose build
+    - docker-compose up --detach 
+    - docker ps 
+    - docker network connect mynetwork app-mongo-1
+    - docker network connect mynetwork app-web-1
+    - docker network inspect mynetwork
+  script:
+    - docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
+    - docker ps
+    - docker cp plan1.yaml OWASPZAP:/zap/plan1.yaml 
+    - docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/plan1.yaml
+    #- docker exec -i OWASPZAP zap-baseline.py -t http://app-web-1:4000 -r  baseline-report.html
+    - docker exec OWASPZAP sh -c ls
+    - docker exec -i OWASPZAP pwd
+    - docker cp OWASPZAP:/zap/ZAP_REPORT.html .
+    - docker cp OWASPZAP:/zap/ZAP_ALERT_REPORT.md .
+  after_script:
+    - docker ps
+    - docker exec OWASPZAP sh -c ls
+    - docker exec -i OWASPZAP pwd
+    - docker-compose down
+  artifacts:
+    paths:
+      - ZAP_REPORT.html
+      - ZAP_ALERT_REPORT.md
