@@ -16,7 +16,7 @@ test_and_build:
     - docker run -d -i -t --network=mynetwork --name NPM node:latest
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
-    - docker exec -i NPM mkdir -p ${CI_PROJECT_DIR}
+  #- docker exec -i NPM mkdir -p ${CI_PROJECT_DIR}
     - docker cp ${CI_PROJECT_DIR} NPM:/${CI_PROJECT_DIR}
     - docker exec -i NPM ls
     - docker exec -i NPM pwd
