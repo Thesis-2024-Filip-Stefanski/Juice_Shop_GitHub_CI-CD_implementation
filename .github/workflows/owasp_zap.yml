@@ -1,0 +1,58 @@
+name: OWASP ZAP SCAN
+on: [push]
+
+jobs:
+  test:
+    name: OWASP ZAP SCANS
+    runs-on: ubuntu-latest
+
+    steps:
+       - uses: actions/checkout@v2
+         with:
+          ref: master
+          
+       - name: Create Docker Network
+         run: |
+            docker network create mynetwork
+            docker run -d -i -t --network=mynetwork --name NPM node:latest
+            docker exec -i NPM ls
+            docker exec -i NPM pwd
+            docker exec -i NPM mkdir -p ${{ github.workspace }}
+            docker cp ${{ github.workspace }} NPM:/${{ github.workspace }}
+            docker exec -i NPM ls
+            docker exec -i NPM pwd
+            docker exec -i -w /builds NPM ls
+            docker exec -i -w /builds/filip.st1357 NPM ls
+            docker exec -i -w ${{ github.workspace }}/juice-shop_NPM NPM npm install
+            docker ps 
+            docker network inspect mynetwork
+
+          
+       - name: Set up testing environment
+         run: |
+            docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
+            docker ps
+       
+       - name: Copy test files to the OWASP ZAP image
+         run: docker cp OWASPZAP_scanns/normal_scann_no_fail_on_warning.yaml OWASPZAP:/zap/normal_scann_no_fail_on_warning.yaml 
+
+       - name: Execute the scan
+         run: |
+           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/normal_scann_no_fail_on_warning.yaml
+           docker exec OWASPZAP sh -c ls
+           docker exec -i OWASPZAP pwd
+           docker cp OWASPZAP:/zap/ZAP_REPORT.html .
+           docker cp OWASPZAP:/zap/ZAP_ALERT_REPORT.md .
+
+
+       - name: Upload HTML Report
+         uses: actions/upload-artifact@v3
+         with:
+           name: ZAP_REPORT.html
+           path: ZAP_REPORT.html
+
+       - name: Upload MD Report
+         uses: actions/upload-artifact@v3
+         with:
+           name: ZAP_ALERT_REPORT.md
+           path: ZAP_ALERT_REPORT.md
