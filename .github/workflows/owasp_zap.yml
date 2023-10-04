@@ -18,7 +18,7 @@ jobs:
             docker exec -i NPM ls
             docker exec -i NPM pwd
             docker exec -i NPM mkdir -p ${{ github.workspace }}
-            docker cp ${{ github.workspace }} NPM:/${{ github.workspace }}
+            docker cp ${{ github.workspace }} NPM:${{ github.workspace }}
             docker exec -i NPM ls
             docker exec -i NPM pwd
             docker exec -i -w /builds NPM ls
