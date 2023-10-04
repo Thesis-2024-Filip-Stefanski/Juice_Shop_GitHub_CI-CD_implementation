@@ -57,6 +57,3 @@ jobs:
          with:
            name: ZAP_ALERT_REPORT.md
            path: ZAP_ALERT_REPORT.md
-
-       - name: Closing the scann
-         run: docker-compose down
