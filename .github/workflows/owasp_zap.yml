@@ -21,7 +21,8 @@ jobs:
             docker cp ${{ github.workspace }} NPM:${{ github.workspace }}
             docker exec -i NPM ls
             docker exec -i NPM pwd
-            docker exec -i -w /builds NPM ls
+            docker exec -i -w /home/runner/work/npm_no_docker-compose-app/npm_no_docker-compose-app NPM ls
+            docker exec -i -w /home/runner/work/npm_no_docker-compose-app NPM ls
             docker exec -i -w /builds/filip.st1357 NPM ls
             docker exec -i -w ${{ github.workspace }}/juice-shop_NPM NPM npm install
             docker ps 
