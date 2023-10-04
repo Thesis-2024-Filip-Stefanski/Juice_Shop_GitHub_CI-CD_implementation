@@ -32,16 +32,14 @@ jobs:
             docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm start & 
             docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
             docker ps
-            docker cp npm-web-app.yaml OWASPZAP:/zap/npm-web-app.yaml 
-            docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/npm-web-app.yaml
 
        
        - name: Copy test files to the OWASP ZAP image
-         run: docker cp OWASPZAP_scanns/normal_scann_no_fail_on_warning.yaml OWASPZAP:/zap/normal_scann_no_fail_on_warning.yaml 
+         run: docker cp OWASPZAP_scanns/npm-web-app.yaml OWASPZAP:/zap/npm-web-app.yaml 
 
        - name: Execute the scan
          run: |
-           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/normal_scann_no_fail_on_warning.yaml
+           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/npm-web-app.yaml
            docker exec OWASPZAP sh -c ls
            docker exec -i OWASPZAP pwd
            docker cp OWASPZAP:/zap/ZAP_REPORT.html .
@@ -59,3 +57,6 @@ jobs:
          with:
            name: ZAP_ALERT_REPORT.md
            path: ZAP_ALERT_REPORT.md
+
+       - name: Closing the scann
+         run: docker-compose down
