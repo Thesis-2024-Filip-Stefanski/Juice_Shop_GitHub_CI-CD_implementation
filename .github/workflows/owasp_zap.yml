@@ -29,8 +29,12 @@ jobs:
           
        - name: Set up testing environment
          run: |
+            docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm start & 
             docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
             docker ps
+            docker cp npm-web-app.yaml OWASPZAP:/zap/npm-web-app.yaml 
+            docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/npm-web-app.yaml
+
        
        - name: Copy test files to the OWASP ZAP image
          run: docker cp OWASPZAP_scanns/normal_scann_no_fail_on_warning.yaml OWASPZAP:/zap/normal_scann_no_fail_on_warning.yaml 
