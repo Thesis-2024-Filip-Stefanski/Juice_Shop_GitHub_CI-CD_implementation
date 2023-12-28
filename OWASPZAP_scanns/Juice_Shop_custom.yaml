@@ -3,9 +3,9 @@ env:
   contexts:
   - name: "Juice Shop"
     urls:
-    - "http://localhost:3000"
+    - "http://NPM:3000"
     includePaths:
-    - "http://localhost:3000.*"
+    - "http://NPM:3000.*"
     excludePaths: []
     authentication:
       parameters: {}
@@ -181,7 +181,7 @@ jobs:
     name: "activeScan/alert"
     type: "alert"
   - onFail: "ERROR"
-    url: "http://localhost:3000"
+    url: "http://NPM:3000"
     requestHeaderRegex: ""
     requestBodyRegex: ""
     responseHeaderRegex: ""
