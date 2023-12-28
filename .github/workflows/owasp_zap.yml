@@ -35,11 +35,11 @@ jobs:
 
        
        - name: Copy test files to the OWASP ZAP image
-         run: docker cp OWASPZAP_scanns/npm-web-app.yaml OWASPZAP:/zap/npm-web-app.yaml 
+         run: docker cp OWASPZAP_scanns/Juice_Shop_baseline.yaml OWASPZAP:/zap/Juice_Shop_baseline.yaml 
 
        - name: Execute the scan
          run: |
-           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/npm-web-app.yaml
+           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/Juice_Shop_baseline.yaml
            docker exec OWASPZAP sh -c ls
            docker exec -i OWASPZAP pwd
            docker cp OWASPZAP:/zap/ZAP_REPORT.html .
