@@ -1,5 +1,5 @@
 name: OWASP ZAP SCAN
-on: workflow_dispatch
+on: [push]
 
 jobs:
   test:
@@ -15,33 +15,24 @@ jobs:
          run: |
             docker network create mynetwork
             docker run -d -i -t --network=mynetwork --name NPM node:20-alpine
-            docker exec -i NPM ls
-            docker exec -i NPM pwd
             docker exec -i NPM mkdir -p ${{ github.workspace }}
             docker cp ${{ github.workspace }} NPM:${{ github.workspace }}
-            docker exec -i NPM ls
-            docker exec -i NPM pwd
             docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM ls
             docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm install
-            docker ps 
-            docker network inspect mynetwork
 
           
        - name: Set up testing environment
          run: |
             docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm start & 
             docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
-            docker ps
 
        
        - name: Copy test files to the OWASP ZAP image
-         run: docker cp OWASPZAP_scanns/Juice_Shop_custom1.yaml OWASPZAP:/zap/Juice_Shop_custom1.yaml 
+         run: docker cp OWASPZAP_scanns/Juice_Shop_full.yaml OWASPZAP:/zap/Juice_Shop_full.yaml 
 
        - name: Execute the scan
          run: |
-           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/Juice_Shop_custom1.yaml
-           docker exec OWASPZAP sh -c ls
-           docker exec -i OWASPZAP pwd
+           docker exec -i OWASPZAP zap.sh -cmd -autorun /zap/Juice_Shop_full.yaml
            docker cp OWASPZAP:/zap/ZAP_REPORT.html .
            docker cp OWASPZAP:/zap/ZAP_ALERT_REPORT.md .
 
