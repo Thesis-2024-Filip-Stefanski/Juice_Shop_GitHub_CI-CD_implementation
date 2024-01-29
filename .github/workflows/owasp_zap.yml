@@ -17,7 +17,6 @@ jobs:
             docker run -d -i -t --network=mynetwork --name NPM node:20-alpine
             docker exec -i NPM mkdir -p ${{ github.workspace }}
             docker cp ${{ github.workspace }} NPM:${{ github.workspace }}
-            docker exec -i -w ${{ github.workspace }}/${{ github.event.repository.name }} NPM ls
             docker exec -i -w ${{ github.workspace }}/${{ github.event.repository.name }} NPM npm install
 
           
