@@ -17,13 +17,13 @@ jobs:
             docker run -d -i -t --network=mynetwork --name NPM node:20-alpine
             docker exec -i NPM mkdir -p ${{ github.workspace }}
             docker cp ${{ github.workspace }} NPM:${{ github.workspace }}
-            docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM ls
-            docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm install
+            docker exec -i -w ${{ github.workspace }}/${{ github.event.repository.name }} NPM ls
+            docker exec -i -w ${{ github.workspace }}/${{ github.event.repository.name }} NPM npm install
 
           
        - name: Set up testing environment
          run: |
-            docker exec -i -w ${{ github.workspace }}/npm_no_docker-compose-app NPM npm start & 
+            docker exec -i -w ${{ github.workspace }}/${{ github.event.repository.name }} NPM npm start & 
             docker run -d -i -t --network=mynetwork --name OWASPZAP -v $(pwd):/zap/wrk/:rw owasp/zap2docker-stable
 
        
